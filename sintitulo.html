@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="logo imagen">
+    <title> sin titulo </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+    body, html {
+            margin: 0;
+            padding: 0;
+            height: 100vh; 
+            background-image: url('https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcm0zMDktYWV3LTAxM18xXzEuanBn.jpg');
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: #f461b47f;
+            padding: 4px;
+        }
+
+        .menu {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu li {
+            position: relative;
+            margin-right: 14px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+        }
+
+        .menu a:hover {
+            background-color: #0000002c;
+        }
+
+        .dropdown-content {
+            display: block;
+            position: absolute;
+            background-color: #f461b47f;
+            min-width: 130px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #0000002c;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border-radius: 50%;
+        }
+
+        .right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px; /* 增加一些按钮之间的间距 */
+        }
+
+        #search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 20px; /* 确保与按钮之间有间隔 */
+        }
+
+        #search-box {
+            padding: 9px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            background-color: #00000072;
+            color: white; /* 使文字颜色为白色 */
+        }
+
+        #search-button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-left: none;
+            background: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        #search-button img {
+            width: 14px;
+            height: 14px;
+        }
+
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            transition: width 0.5s;
+            z-index: 999;
+            display: none; /* 初始隐藏 */
+        }
+
+        .content {
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        #loginModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.8); /* 半透明黑色背景 */
+            border-radius: 15px;
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+        }
+
+        #openLoginBtn {
+            display: inline-block;
+            padding: 6px 10px;
+            background: linear-gradient(45deg, #0bffcabd, #00fffbb5); /* 按钮渐变色 */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #openLoginBtn:hover {
+            background: linear-gradient(45deg, #05ffea8a, #0af3e0ac); /* 悬停时颜色略微变深 */
+        }
+
+        #loginButton {
+            width: 100%;
+            padding: 12px;
+            background-color: #00fff2be;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        #loginButton:hover {
+            background-color: #00ffea83;
+        }
+
+        #username {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #showName {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            font-size: 16px;
+            background-color: rgba(0, 0, 0, 0.8); /* 右下角欢迎信息黑色透明 */
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .closeButton {
+            cursor: pointer;
+            color: #bbb;
+            font-size: 24px;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+        }
+
+        .closeButton:hover {
+            color: white;
+        }
+
+        .slider {
+            position: relative;
+            max-width: 600px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .slider-button {  /* 更改了按钮的类名 */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.352);
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            width: 30px;
+            height: 50px;
+        }
+
+        .slider-button.prev {  /* 变化后的按钮类 */
+            left: 10px;
+        }
+
+        .slider-button.next {  /* 变化后的按钮类 */
+            right: 10px;
+        }
+
+        .slider-button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .indicators {
+            position: absolute; 
+            bottom: 10px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            display: flex; 
+            z-index: 10; 
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #bbb;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .active {
+            background-color: #717171;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 主菜单 -->
+    <nav>
+        <ul class="menu">
+            <!-- 左边单独选项 -->
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Idiomas<img src="https://raw.githubusercontent.com/xwmj003/qizhi/refs/heads/main/lang0.webp" class="icon"></a>
+                <div class="dropdown-content">
+                    <a href="#link1">Español<img src="https://github.com/xwmj003/qizhi/blob/main/Spain0.png?raw=true" class="icon"></a>
+                    <a href="#link2">中文 ZH<img src="https://github.com/xwmj003/qizhi/blob/main/China0.png?raw=true" class="icon"></a>
+                    <a href="#link3">Català<img src="https://github.com/xwmj003/qizhi/blob/main/catalunya.png?raw=true" class="icon"></a>
+                    <a href="#link4">English<img src="https://github.com/xwmj003/qizhi/blob/main/United-Kingdom0.png?raw=true" class="icon"></a>
+                    <a href="#link5">Русский<img src="https://raw.githubusercontent.com/xwmj003/qizhi/refs/heads/main/Russia0.webp" class="icon"></a>
+                    <a href="#link6">Français<img src="https://github.com/xwmj003/qizhi/blob/main/france0.png?raw=true" class="icon"></a>
+                </div>
+            </li>
+
+            <!-- 右边 4 个按钮 -->
+            <div class="right">
+                <li class="dropdown">
+                    <a href="" class="dropbtn">Inicio</a>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Producto</a>
+                    <div class="dropdown-content">
+                        <a href="#link8">Producto 1</a>
+                        <a href="#link9">2.2</a>
+                        <a href="#link10">2.3</a>
+                        <a href="#link11">2.4</a>
+                    </div>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Contactos</a>
+                    <div class="dropdown-content">
+                        <a href="#link16">Ayudas</a>
+                        <a href="#link17">Gmail</a>
+                        <a href="#link18">Comentarios</a>
+                    </div>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Más Opciones</a>
+                    <div class="dropdown-content">
+                        <a href="#link12">Ayuda <img src="https://github.com/xwmj003/coment0/blob/main/coment0icon.png?raw=true" style="height: 24px; width: 24px; border-radius: "></a>
+                        <a href="#link13">3.2</a>
+                        <a href="#link14">3.3</a>
+                        <a href="#link15">3.4</a>
+                    </div>
+                </li>
+
+<div class="right">
+    <div id="search-container">
+        <input type="text" id="search-box" placeholder="Búscar..." />
+        <button id="search-button">
+            <img src="https://img.icons8.com/material-outlined/24/000000/search--v1.png" alt="搜索" />
+        </button>
+    </div>
+
+    <button id="openLoginBtn">Cuenta</button>
+    <div id="overlay"></div>
+</div>
+            </div>
+    <div id="progress"></div>
+        </ul>
+    </nav>
+
+    <div class="content">
+<br><br><br><br><br><br><br>
+<center>
+        <h1 style="color: white">TÍTULO O MARCA</h1>
+        <p style="color: white">logo</p>
+</center>
+<br><br><br><br><br><br><br>
+        <p style="color: white">2</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">3</p>
+<br>
+
+<div class="slider">
+    <button class="slider-button prev" onclick="moveSlide(-1)">&#10094;</button>  <!-- 更改了按钮的类 -->
+    <div class="slides">
+        <div class="slide">
+            <img src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_640.jpg" alt="Imagen 1" style="width:100%">
+        </div>
+        <div class="slide">
+            <img src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_640.jpg" alt="Imagen 2" style="width:100%">
+        </div>
+        <div class="slide">
+            <img src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_640.jpg" alt="Imagen 3" style="width:100%">
+        </div>
+        <div class="slide">
+            <img src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_640.jpg" alt="Imagen 4" style="width:100%">
+        </div>
+        <!-- Agrega más imágenes según sea necesario -->
+    </div>
+    <button class="slider-button next" onclick="moveSlide(1)">&#10095;</button>  <!-- 更改了按钮的类 -->
+
+    <!-- Indicadores fijos en la parte inferior -->
+    <div class="indicators">
+        <span class="indicator" onclick="showSlide(0)"></span>
+        <span class="indicator" onclick="showSlide(1)"></span>
+        <span class="indicator" onclick="showSlide(2)"></span>
+        <span class="indicator" onclick="showSlide(3)"></span>
+
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+        <p style="color: white">4</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">5</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">6</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">7</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">8</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">9</p>
+<br><br><br><br><br><br><br>
+        <p style="color: white">10</p>
+    </div>
+
+<div id="loginModal">
+    <span class="closeButton" id="closeModal">&times;</span>
+    <h2>Iniciar Sesión</h2> <br>
+    <label for="username">Nombre de la cuenta <br><p style="color: red;"> ⚠ Atención: No pongas tus cuentas, contraseñas ni datos reales. ⚠ </p><br></label>
+    <input type="text" id="username" placeholder="Nombre" maxlength="20">
+    <button id="loginButton"> Iniciar Sesión</button>
+</div>
+<div id="showName"></div>
+
+
+
+    <script>
+        document.querySelectorAll('.dropdown').forEach(function(dropdown) {
+            dropdown.addEventListener('click', function(event) {
+                // 防止点击事件传递
+                event.stopPropagation();
+
+                // 获取当前菜单项
+                var dropdownContent = this.querySelector('.dropdown-content');
+
+                // 如果当前菜单是显示状态，收回它
+                if (dropdownContent.style.maxHeight && dropdownContent.style.maxHeight !== '0px') {
+                    dropdownContent.style.maxHeight = '0';
+                } else {
+                    // 隐藏其他打开的菜单
+                    document.querySelectorAll('.dropdown-content').forEach(function(content) {
+                        content.style.maxHeight = '0';
+                    });
+
+                    // 打开当前菜单
+                    dropdownContent.style.maxHeight = dropdownContent.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // 点击页面其他地方时，隐藏所有菜单
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown-content').forEach(function(content) {
+                content.style.maxHeight = '0';
+            });
+        });
+    </script>
+
+
+<script>
+    const searchBox = document.getElementById('search-box');
+    const searchButton = document.getElementById('search-button');
+    const progress = document.getElementById('progress');
+    const content = document.querySelector('.content');
+
+    // 搜索函数
+    function search() {
+        const query = searchBox.value;
+        // 使用 querySelectorAll 选择 p, h1, h2, h3 等标签
+        const elements = content.querySelectorAll('p, h1, h2, h3');
+        let found = false;
+
+        progress.style.display = 'block';
+        progress.style.width = '0%';
+
+        for (let i = 0; i < elements.length; i++) {
+            const text = elements[i].innerText;
+            if (text.includes(query)) {
+                found = true;
+                const rect = elements[i].getBoundingClientRect();
+                window.scrollTo({
+                    top: rect.top + window.scrollY,
+                    behavior: 'smooth'
+                });
+                progress.style.width = '100%';
+                break;
+            }
+        }
+
+        if (!found) {
+            progress.style.width = '100%';
+            alert('Upps! Error No hay resultado');
+        }
+
+        setTimeout(() => {
+            progress.style.display = 'none';
+            progress.style.width = '0%';
+        }, 1000); // 进度条延迟消失
+    }
+
+    // 监听输入框按下回车
+    searchBox.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            search();
+        }
+    });
+
+    // 监听点击放大镜图标
+    searchButton.addEventListener('click', search);
+</script>
+
+<script>
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const loginModal = document.getElementById("loginModal");
+    const overlay = document.getElementById("overlay");
+    const closeModal = document.getElementById("closeModal");
+    const loginButton = document.getElementById("loginButton");
+
+    let isLoggedIn = false; // 记录用户是否已经登入
+
+    // 打开登入窗口
+    openLoginBtn.onclick = function() {
+        // 无论是否登入，都允许再次输入名字
+        loginModal.style.display = "block";
+        overlay.style.display = "block";
+    }
+
+    // 关闭登入窗口
+    closeModal.onclick = function() {
+        loginModal.style.display = "none";
+        overlay.style.display = "none";
+    }
+
+    // 模拟登入操作
+    loginButton.onclick = function() {
+        const username = document.getElementById("username").value;
+        if (username) {
+            loginModal.style.display = "none";
+            overlay.style.display = "none";
+            openLoginBtn.innerText = username; // 按钮显示用户名
+            isLoggedIn = true; // 标记为已登入
+        } else {
+            alert("请输入账号");
+        }
+    }
+
+    // 点击外部关闭窗口	
+    overlay.onclick = function() {
+        loginModal.style.display = "none";
+        overlay.style.display = "none";
+    }
+</script>
+
+<script>
+    let slideIndex = 0;
+
+    function showSlide(index) {
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+
+        if (index >= totalSlides) {
+            slideIndex = 0; // Volver al inicio
+        } else if (index < 0) {
+            slideIndex = totalSlides - 1; // Ir al final
+        } else {
+            slideIndex = index;
+        }
+
+        const offset = -slideIndex * 100; // Calcular el desplazamiento
+        document.querySelector('.slides').style.transform = `translateX(${offset}%)`;
+
+        // Actualizar los indicadores
+        indicators.forEach((indicator, i) => {
+            indicator.classList.remove('active');
+            if (i === slideIndex) {
+                indicator.classList.add('active');
+            }
+        });
+    }
+
+    function moveSlide(direction) {
+        showSlide(slideIndex + direction);
+    }
+
+    // Mostrar la primera imagen al cargar
+    showSlide(slideIndex);
+</script>
+
+</body>
+</html>
